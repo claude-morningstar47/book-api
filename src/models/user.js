@@ -1,7 +1,7 @@
 const validTypes = ["admin", "user"];
 
 module.exports = (Sequelize, DataTypes) => {
-  return Sequelize.define("user", {
+  return Sequelize.define("User", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
