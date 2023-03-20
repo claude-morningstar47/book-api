@@ -2,31 +2,42 @@ const express = require("express");
 const morgan = require("morgan");
 const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
-const sequelize = require("./src/database/sequelize");
 const cors = require("cors");
 const helmet = require("helmet");
-const authRoutes = require("./src/auth/authRoutes");
 require("dotenv").config();
 
 // Initialisation de l'application Express
 const app = express();
-const portNumber = process.env.PORT;
+
+var corsOptions = {
+  origin: "http://localhost:5000",
+};
 
 app
   .use(favicon(__dirname + "/book.png"))
   .use(bodyParser.json())
   .use(morgan("dev"))
-  .use(cors())
+  .use(cors(corsOptions))
   .use(helmet())
   .use(express.urlencoded({ extended: true }));
 
-sequelize.initDB();
+const db = require("./app/models");
+
+db.sequelize
+  .sync({ force: true })
+  .then(() => {
+    console.log("Synced db");
+  })
+  .catch((err) => {
+    console.log("Failed to sync db: " + err.message);
+  });
 
 app.get("/", (req, res) => {
-  res.send("Hello, la connexion a réussi!");
+  res.send("Welcome to book-api application.");
 });
 
-app.use("/book/auth", authRoutes);
+require("./app/routes/user.routes")(app);
+require("./app/routes/book.routes")(app);
 
 // Handle 404 error
 app.use(({ res }) => {
@@ -35,6 +46,8 @@ app.use(({ res }) => {
   res.status(404).json({ message });
 });
 
+// set port, listen for requests
+const portNumber = process.env.PORT || 8080;
 app.listen(portNumber, () => {
-  console.log(`Server is running on http://localhost:${portNumber}`);
+  console.log(`Server is running on port ${portNumber}.`);
 });
