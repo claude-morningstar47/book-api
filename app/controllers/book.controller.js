@@ -71,80 +71,85 @@ exports.findOne = (req, res) => {
 };
 
 // Update a Book by the id in the request
-exports.update = (req, res) => {
-  const id = req.params.id;
+(exports.update = auth),
+  (req, res) => {
+    const id = req.params.id;
 
-  Book.update(req.body, {
-    where: { id: id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "Book was updated successfully.",
-        });
-      } else {
-        res.send({
-          message: `Cannot update Book with id=${id}. Maybe Book was not found or req.body is empty!`,
-        });
-      }
+    Book.update(req.body, {
+      where: { id: id },
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Error updating Book with id=" + id,
+      .then((num) => {
+        if (num == 1) {
+          res.send({
+            message: "Book was updated successfully.",
+          });
+        } else {
+          res.send({
+            message: `Cannot update Book with id=${id}. Maybe Book was not found or req.body is empty!`,
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: "Error updating Book with id=" + id,
+        });
       });
-    });
-};
+  };
 
 // Delete a Book with the specified id in the request
-exports.delete = (req, res) => {
-  const id = req.params.id;
+(exports.delete = auth),
+  (req, res) => {
+    const id = req.params.id;
 
-  Book.destroy({
-    where: { id: id },
-  })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "Book was deleted successfully!",
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Book with id=${id}. Maybe Book was not found!`,
-        });
-      }
+    Book.destroy({
+      where: { id: id },
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Could not delete Book with id=" + id,
+      .then((num) => {
+        if (num == 1) {
+          res.send({
+            message: "Book was deleted successfully!",
+          });
+        } else {
+          res.send({
+            message: `Cannot delete Book with id=${id}. Maybe Book was not found!`,
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: "Could not delete Book with id=" + id,
+        });
       });
-    });
-};
+  };
 
 // Delete all Book from the database.
-exports.deleteAll = (req, res) => {
-  Book.destroy({
-    where: {},
-    truncate: false,
-  })
-    .then((nums) => {
-      res.send({ message: `${nums} Book were deleted successfully!` });
+(exports.deleteAll = auth),
+  (req, res) => {
+    Book.destroy({
+      where: {},
+      truncate: false,
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while removing all book.",
+      .then((nums) => {
+        res.send({ message: `${nums} Book were deleted successfully!` });
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while removing all book.",
+        });
       });
-    });
-};
+  };
 
 // find all published Book
-exports.findAllPublished = (req, res) => {
-  Book.findAll({ where: { published: true } })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving book.",
+(exports.findAllPublished = auth),
+  (req, res) => {
+    Book.findAll({ where: { published: true } })
+      .then((data) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: err.message || "Some error occurred while retrieving book.",
+        });
       });
-    });
-};
+  };
