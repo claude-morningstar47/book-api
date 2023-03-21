@@ -9,7 +9,7 @@ require("dotenv").config();
 // Initialisation de l'application Express
 const app = express();
 
-var corsOptions = {
+const corsOptions = {
   origin: "http://localhost:5000",
 };
 
@@ -24,7 +24,7 @@ app
 const db = require("./app/models");
 
 db.sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     console.log("Synced db");
   })
@@ -40,7 +40,7 @@ require("./app/routes/user.routes")(app);
 require("./app/routes/book.routes")(app);
 
 // Handle 404 error
-app.use(({ res }) => {
+app.use((req, res) => {
   const message =
     "Impossible de trouver la ressource demandée ! Vous pouvez essayer une autre URL.";
   res.status(404).json({ message });

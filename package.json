@@ -1,6 +1,6 @@
 {
   "name": "book-api",
-  "version": "1.0.10",
+  "version": "2.1.10",
   "description": "une API RESTful pour gérer des livres avec des fonctionnalités d'authentification et d'administration.",
   "main": "app.js",
   "scripts": {
