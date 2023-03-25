@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const MongoClient = require("mongodb").MongoClient;
+// const MongoClient = require("mongodb").MongoClient;
 
 // configuration de l'application
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -10,9 +10,24 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 
 // configuration de la base de données MongoDB
-const url = "mongodb://localhost:27017/";
-const dbName = "mydatabase";
-const client = new MongoClient(url, { useNewUrlParser: true });
+// const url = "mongodb://localhost:27017/";
+const dbName = "Cluster0";
+// const client = new MongoClient(url, { useNewUrlParser: true });
+
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const uri =
+  "mongodb+srv://Winds47:oOXINpycFSscX2uJ@cluster0.ms1vqof.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
+});
+
+// client.connect(err => {
+//   const collection = client.db("test").collection("devices");
+//   // perform actions on the collection object
+//   client.close();
+// });
 
 // endpoint pour récupérer tous les utilisateurs
 app.get("/users", (req, res) => {

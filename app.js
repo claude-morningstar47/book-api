@@ -4,7 +4,7 @@ const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
-require("dotenv").config();
+dotenv.config({ path: "./app/config/config.env" });
 
 // Initialisation de l'application Express
 const app = express();
