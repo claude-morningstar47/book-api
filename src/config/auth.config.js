@@ -1,6 +1,6 @@
 // Import required packages
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+require("dotenv").config({ path: "./config.env" });
 // Middleware to check authorization header on incoming request
 module.exports = (req, res, next) => {
   // Get authorization header from incoming request

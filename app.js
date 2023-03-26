@@ -4,7 +4,7 @@ const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
-dotenv.config({ path: "./app/config/config.env" });
+require("dotenv").config({ path: "./config.env" });
 
 // Initialisation de l'application Express
 const app = express();
@@ -21,7 +21,7 @@ app
   .use(helmet())
   .use(express.urlencoded({ extended: true }));
 
-const db = require("./app/models");
+const db = require("./src/models");
 
 db.sequelize
   .sync({ force: false })
@@ -36,8 +36,8 @@ app.get("/", (req, res) => {
   res.send("Welcome to book-api application.");
 });
 
-require("./app/routes/user.routes")(app);
-require("./app/routes/book.routes")(app);
+require("./src/routes/user.routes")(app);
+require("./src/routes/book.routes")(app);
 
 // Handle 404 error
 app.use((req, res) => {
