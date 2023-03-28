@@ -39,7 +39,7 @@ exports.findAll = (req, res) => {
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
   Book.findAll({ where: condition })
-    .then((data) => {
+    .then((res) => {
       res.send(data);
     })
     .catch((err) => {
