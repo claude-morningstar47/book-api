@@ -34,18 +34,9 @@ db.sequelize
   });
 
 app.get("/", (req, res) => {
-  res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("Welcome to book-api application!\n");
+  res.send("Welcome to book-api application!\n");
 });
-app.on("upgrade", (req, socket, head) => {
-  socket.write(
-    "HTTP/1.1 101 Web Socket Protocol Handshake\r\n" +
-      "Upgrade: WebSocket\r\n " +
-      "Connection: Upgrade\r\n" +
-      "\r\n"
-  );
-  socket.pipe(socket);
-});
+
 // Routes (endpoints)
 require("./src/routes/user.routes")(app);
 require("./src/routes/book.routes")(app);
