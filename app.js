@@ -22,6 +22,7 @@ app
   .use(express.urlencoded({ extended: true }));
 
 const db = require("./src/models");
+const { json } = require("body-parser");
 
 db.sequelize
   .sync({ force: false })
@@ -33,7 +34,17 @@ db.sequelize
   });
 
 app.get("/", (req, res) => {
-  res.send("Welcome to book-api application.");
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Welcome to book-api application!\n");
+});
+app.on("upgrade", (req, socket, head) => {
+  socket.write(
+    "HTTP/1.1 101 Web Socket Protocol Handshake\r\n" +
+      "Upgrade: WebSocket\r\n " +
+      "Connection: Upgrade\r\n" +
+      "\r\n"
+  );
+  socket.pipe(socket);
 });
 // Routes (endpoints)
 require("./src/routes/user.routes")(app);
@@ -48,6 +59,7 @@ app.use((req, res) => {
 
 // set port, listen for requests
 const portNumber = process.env.PORT || 8080;
-app.listen(portNumber, () => {
-  console.log(`Server is running on port ${portNumber}.`);
+const hostname = process.env.HOST || "127.0.0.1";
+app.listen(portNumber, hostname, () => {
+  console.log(`Server running at http://${hostname}:${portNumber}/`);
 });
