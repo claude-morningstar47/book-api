@@ -35,8 +35,7 @@ db.sequelize
 app.get("/", (req, res) => {
   res.send("Welcome to book-api application.");
 });
-//  ceci est un commentaire
-
+// Routes (endpoints)
 require("./src/routes/user.routes")(app);
 require("./src/routes/book.routes")(app);
 
