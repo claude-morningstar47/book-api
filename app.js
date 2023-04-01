@@ -4,6 +4,10 @@ const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
+// redis
+const redis = require("redis");
+const redisStore = require("connect-redis")(session);
+const client = redis.createClient();
 require("dotenv").config({ path: "./config.env" });
 
 // Initialisation de l'application Express
@@ -33,8 +37,24 @@ db.sequelize
     console.log("Failed to sync db: " + err.message);
   });
 
+// Use Redis as session store
+app.use(
+  session({
+    store: new redisStore({ client }),
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
 app.get("/", (req, res) => {
+  req.session.username = "john";
   res.send("Welcome to book-api application!\n");
+});
+
+app.get("/user", (req, res) => {
+  const username = req.session.username;
+  res.send(`Session data retrieved successfully: ${username}`);
 });
 
 // Routes (endpoints)
