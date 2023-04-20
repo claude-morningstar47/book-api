@@ -38,6 +38,10 @@ db.sequelize
 require("./src/routes/user.routes")(app);
 require("./src/routes/book.routes")(app);
 
+app.get("/", (req, res) => {
+  res.status(200);
+  res.send("Hey, welcome to Book_api!");
+});
 // Handle 404 error
 app.use((req, res) => {
   const message =
