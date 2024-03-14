@@ -11,6 +11,6 @@ module.exports = (app) => {
     .get("/:id", user.findByPk)
     .patch("/:id", user.patch)
     .delete("/:id", user.delete);
-
+// tests 
   app.use("/api/auth", router);
 };
